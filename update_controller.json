@@ -1,0 +1,25 @@
+{
+  "has_update": true,
+  "manifest": {
+    "version": "v2.0.0",
+    "expires_at": 1893456000, 
+    "files": [
+      {
+        "path": "MyService.exe",
+        "url": "https://dungameo0204.github.io/AvServer/ScannerEngine.dll",
+        "md5": "18278E1D7A08D1FD32DB099AEEFCA083",
+        "size": 563200, 
+        "metadata": {
+          "restart_services": ["AvScanVirus"]
+        }
+      },
+      {
+        "path": "ScannerEngine.dll",
+        "url": "https://dungameo0204.github.io/AvServer/ScannerEngine.dll",
+        "md5": "954AD72501A67CADC63A0C31AE586E6B",
+        "size": 150528,
+        "metadata": null
+      }
+    ]
+  }
+}
