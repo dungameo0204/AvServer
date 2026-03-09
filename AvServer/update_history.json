@@ -40,13 +40,13 @@
         "has_update": true,
         "manifest": {
             "version": "2.0.0",
-            "expires_at": 1775623600,
+            "expires_at": 1775634460,
             "files": [
                 {
                     "path": "MyService.exe",
                     "url": "",
-                    "md5": "a466691e5e44bf716fd081054d3cc02ab241d0a1e3ef3f94eabc91c7e434ab79",
-                    "size": 563200,
+                    "md5": "da574a174b73ecff3e1fe6e51a5d347421e3dfd02aa6db796bc93302f2ffccc0",
+                    "size": 566272,
                     "metadata": {}
                 },
                 {
