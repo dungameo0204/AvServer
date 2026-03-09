@@ -35,5 +35,63 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.0",
+            "expires_at": 1775623600,
+            "files": [
+                {
+                    "path": "MyService.exe",
+                    "url": "",
+                    "md5": "a466691e5e44bf716fd081054d3cc02ab241d0a1e3ef3f94eabc91c7e434ab79",
+                    "size": 563200,
+                    "metadata": {}
+                },
+                {
+                    "path": "ScannerEngine.dll",
+                    "url": "",
+                    "md5": "7d04ecb9c977a3f73d186e157e960453e0611135eb444fc6fea70820acc96e2e",
+                    "size": 150016,
+                    "metadata": {}
+                },
+                {
+                    "path": ".vs/MyService/v18/.suo",
+                    "url": "",
+                    "md5": "67f56945c9c70f5ba9959efae794d12ea7b3c8a5e15c562129588612b3589fdd",
+                    "size": 5632,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_0.dat",
+                    "url": "",
+                    "md5": "14e3a3838e52603839ab4ab2ced66e3ed3e4df855c616a004c59da1b611d01ea",
+                    "size": 52428800,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_1.dat",
+                    "url": "",
+                    "md5": "d43699cef6457f3aeadfb8ed04b6512a56dd78ff3c0e6801494877cc6f80e65d",
+                    "size": 52428800,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_2.dat",
+                    "url": "",
+                    "md5": "9afde4072f9b524a473850452937eaee725ffdee7d99f7030580cd12902d6ba7",
+                    "size": 52428800,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_3.dat",
+                    "url": "",
+                    "md5": "7ef4e38dc88999194ee8f15b3b112d4829e3d6e42337bb1f95060017110641f6",
+                    "size": 52428800,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
