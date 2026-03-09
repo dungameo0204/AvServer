@@ -2,7 +2,7 @@
     "has_update": true,
     "manifest": {
         "version": "2.0.0",
-        "expires_at": 1775634460,
+        "expires_at": 1775634823,
         "files": [
             {
                 "path": "MyService.exe",
