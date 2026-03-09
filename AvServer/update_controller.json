@@ -1,8 +1,8 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260309.160906",
-        "expires_at": 1775639346,
+        "version": "2.0.20260309.162602",
+        "expires_at": 1775640362,
         "files": [
             {
                 "path": "MyService.exe",
@@ -21,28 +21,28 @@
             {
                 "path": "heavy_payloads/database_pack_0.dat",
                 "url": "",
-                "md5": "6d84af6c9cf79b673b4e95f254b96e23377905eb01f2bd57278ff3d757048b78",
+                "md5": "b4934a4d2799763c4fcf18b31ac66b97105a49c33f197259c34cb677e1f17286",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_1.dat",
                 "url": "",
-                "md5": "dc93c2a7e38ec3b725cc434777d0e885e21e56dbac078cd7456b7df162fbf61c",
+                "md5": "f9c63b3e24cf45bdea1491031ed34ddf1548a7c2120b64ee128be3fd6f6dd32b",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_2.dat",
                 "url": "",
-                "md5": "3b1f71aca7b492fee4befddd4bfe97507b09ee65d31662549112a410ac6c87bf",
+                "md5": "2c09f29ad2c9a7815ac0b90df8dcba412111a0d4492a5080e4c0e3c5cd1a91ba",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_3.dat",
                 "url": "",
-                "md5": "99001cebfb8841f910a5f106fa0665d167eec85f6944b4d7d5fe97b271ca0105",
+                "md5": "eef93a70c1500b639d579eafed782e64566e607cab3d6aae7e46f7e3d92e4e9c",
                 "size": 10485760,
                 "metadata": {}
             }
