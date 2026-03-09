@@ -195,5 +195,56 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.20260309.160906",
+            "expires_at": 1775639346,
+            "files": [
+                {
+                    "path": "MyService.exe",
+                    "url": "",
+                    "md5": "da574a174b73ecff3e1fe6e51a5d347421e3dfd02aa6db796bc93302f2ffccc0",
+                    "size": 566272,
+                    "metadata": {}
+                },
+                {
+                    "path": "ScannerEngine.dll",
+                    "url": "",
+                    "md5": "7d04ecb9c977a3f73d186e157e960453e0611135eb444fc6fea70820acc96e2e",
+                    "size": 150016,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_0.dat",
+                    "url": "",
+                    "md5": "6d84af6c9cf79b673b4e95f254b96e23377905eb01f2bd57278ff3d757048b78",
+                    "size": 10485760,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_1.dat",
+                    "url": "",
+                    "md5": "dc93c2a7e38ec3b725cc434777d0e885e21e56dbac078cd7456b7df162fbf61c",
+                    "size": 10485760,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_2.dat",
+                    "url": "",
+                    "md5": "3b1f71aca7b492fee4befddd4bfe97507b09ee65d31662549112a410ac6c87bf",
+                    "size": 10485760,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_3.dat",
+                    "url": "",
+                    "md5": "99001cebfb8841f910a5f106fa0665d167eec85f6944b4d7d5fe97b271ca0105",
+                    "size": 10485760,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
