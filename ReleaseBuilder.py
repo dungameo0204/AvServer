@@ -61,6 +61,7 @@ def build_release():
 
     # 3. Tạo/Cập nhật file JSON cho Client
     release_info = {
+        "has_update": True,
         "version": LATEST_VERSION,
         "release_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "manifest": {
