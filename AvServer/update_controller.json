@@ -1,8 +1,8 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260309.170356",
-        "expires_at": 1775642636,
+        "version": "2.0.20260309.170635",
+        "expires_at": 1775642795,
         "files": [
             {
                 "path": "MyService.exe",
@@ -21,28 +21,70 @@
             {
                 "path": "heavy_payloads/database_pack_0.dat",
                 "url": "",
-                "md5": "d25ee0297b06f8d14d9bd7edaa72fce3b60e3f9ce7185129783fd142b6dc85f5",
+                "md5": "6afc306073a827c9cf131a955e9df1c6930c227cf8b41c174ed659cf57eee624",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_1.dat",
                 "url": "",
-                "md5": "03ca901a4cd95db8788ce9b2ed2720c17a5a3dccab0c35cbee4dc4ce6d9f97d1",
+                "md5": "62daf1c049ddbcdf615b8fa45abe6ab12f74f1521809702623af3dba55fbb391",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_2.dat",
                 "url": "",
-                "md5": "611cf0bcf2e3ce13dea3fbb30d1d591ade3963d1e5bb7249f534dfb4773e2572",
+                "md5": "05517096903b64e60a5275f8090d537734cdc3839244820299ca328a981d0938",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_3.dat",
                 "url": "",
-                "md5": "6c45a9b8c72e3882d0194962779f8f7ac18399e8a4fa7ced6dc94bafefe3aaae",
+                "md5": "a34663069d5aaa870c0009e60faab3fc90f6b9049b51cc4f50c76620fb6a4a68",
+                "size": 10485760,
+                "metadata": {}
+            },
+            {
+                "path": "heavy_payloads/database_pack_4.dat",
+                "url": "",
+                "md5": "f0f924693510b8ce5a9a7719a4c186989c2a27857e98e3dcc70b2397bbb57dc3",
+                "size": 10485760,
+                "metadata": {}
+            },
+            {
+                "path": "heavy_payloads/database_pack_5.dat",
+                "url": "",
+                "md5": "ec446ed43954584b70b87213aec87ff7173a6be26e52f514e6acafb68972bd7d",
+                "size": 10485760,
+                "metadata": {}
+            },
+            {
+                "path": "heavy_payloads/database_pack_6.dat",
+                "url": "",
+                "md5": "e67c125601c05883ee243bab555dd1162c6f5fb36580b162e6fee59ea958aa3f",
+                "size": 10485760,
+                "metadata": {}
+            },
+            {
+                "path": "heavy_payloads/database_pack_7.dat",
+                "url": "",
+                "md5": "a4245feab03bb69a04697258c22aaead1299e0052ef86a59bf8483c05cacdbf9",
+                "size": 10485760,
+                "metadata": {}
+            },
+            {
+                "path": "heavy_payloads/database_pack_8.dat",
+                "url": "",
+                "md5": "54e5d1d00176cdabeb3c5388e8245493b43c90431de28125d3d1a8b8dbd52b08",
+                "size": 10485760,
+                "metadata": {}
+            },
+            {
+                "path": "heavy_payloads/database_pack_9.dat",
+                "url": "",
+                "md5": "7659a8e4ba62c2ea48f69e8a4ab1dc7004d254fb36e806365bd7814ac95575d1",
                 "size": 10485760,
                 "metadata": {}
             }
