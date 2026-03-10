@@ -17,7 +17,7 @@ def calculate_sha256(filepath):
     return sha256_hash.hexdigest()
 
 # 1. TỰ ĐỘNG SINH DỮ LIỆU MỚI TINH ĐỂ ĐỔI HASH
-def generate_dummy_files(target_dir, num_files=5, size_mb=10): 
+def generate_dummy_files(target_dir, num_files=3, size_mb=10): 
     # Mẹo: Tôi giảm xuống 10MB/file (Tổng 40MB) để test cho lẹ. Bác thích thì đổi lại 50 nhé.
     os.makedirs(target_dir, exist_ok=True)
     print(f"[*] Dang tao MOI {num_files} file nang, moi file {size_mb}MB (Mat chut thoi gian)...")
