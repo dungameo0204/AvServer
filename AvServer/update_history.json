@@ -2262,5 +2262,98 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.20260310.154853",
+            "expires_at": 1775724533,
+            "files": [
+                {
+                    "path": "MyService.exe",
+                    "url": "",
+                    "md5": "63c66278a6a6bd1c24a243b614d0357e8ef9125f3063d6b9b60e02251cb097df",
+                    "size": 327168,
+                    "metadata": {}
+                },
+                {
+                    "path": "ScannerEngine.dll",
+                    "url": "",
+                    "md5": "7d04ecb9c977a3f73d186e157e960453e0611135eb444fc6fea70820acc96e2e",
+                    "size": 150016,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_0.dat",
+                    "url": "",
+                    "md5": "3f89ddb797207ec9635dc165f04eb8f4b630c438c5369b72c5416fec0ff6924c",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_1.dat",
+                    "url": "",
+                    "md5": "52485330b50adc55b7c9c793239d0d748c1dc47c4dbe566916508f01faf48be9",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_2.dat",
+                    "url": "",
+                    "md5": "2209a83c7fc9f8ea9bdc17bd5fbce111bf43aeb0f2e55e188d975e0d642b3b55",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_3.dat",
+                    "url": "",
+                    "md5": "5e781e9ffdc95b4f96e461c779f863681e79cb491104e66f7dd9b30564c136be",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_4.dat",
+                    "url": "",
+                    "md5": "f890b460db4bd3c7d8f33a8d40f6e6f40d9bb9346d0513b0e01c51e6f7dda2d2",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_5.dat",
+                    "url": "",
+                    "md5": "411053268357226cdf289122a585c5083de28bb4700a7e915bd02f946a39c6d8",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_6.dat",
+                    "url": "",
+                    "md5": "1a0c1b7a42a6bd3d07cfa107e27557f00fccd9773c73fbdfe54df1e27c2e8f90",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_7.dat",
+                    "url": "",
+                    "md5": "2690ea205e17403dc3f10c9f3e9807dc26152c1b64f5dbf553f56f298139fc4d",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_8.dat",
+                    "url": "",
+                    "md5": "3b7a1dfe977392b4cc34cc779cb0e381b60a92c11975d966ebfe4590a8af9616",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_9.dat",
+                    "url": "",
+                    "md5": "0c5b491e348fafc558c496b4686344be9850cd0d745d143e5ac3bc8093dae34f",
+                    "size": 1048576,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
