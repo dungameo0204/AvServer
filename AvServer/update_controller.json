@@ -1,8 +1,8 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260310.113154",
-        "expires_at": 1775709114,
+        "version": "2.0.20260310.115704",
+        "expires_at": 1775710624,
         "files": [
             {
                 "path": "MyService.exe",
@@ -21,35 +21,35 @@
             {
                 "path": "heavy_payloads/database_pack_0.dat",
                 "url": "",
-                "md5": "02c75ed409ea00bef81487d7e935b9b014b3e6f5276a14a922dbc31f18a819ba",
+                "md5": "9a0e0009cbf22318711942d1eee8c52a6d054596ff4fd8fee10e3da0d8baffce",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_1.dat",
                 "url": "",
-                "md5": "d1f78eff9739f79cde9448b93cdc564f971a80e6b40e9a5f78f5484ae05feb97",
+                "md5": "9d67d1558d7cd5eddda1ec83f5f5fc69cff516da0e54429874f91ca502771bad",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_2.dat",
                 "url": "",
-                "md5": "e5440a4841b1e960524de03272eb07d670243a7058a928c84c2a6a57b1d7edc8",
+                "md5": "97f69dd3d2738b22ee13aa2c694ddc351bebd6ca0d6b46641c7bec78b4a6ba00",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_3.dat",
                 "url": "",
-                "md5": "10f2df416ffbb24f0cfbe18c0e5e1bd329e73267deb1ea3d6f2f2ac6c5868b4d",
+                "md5": "0fd157009e37455d4aeb5240f38e93e292539dca4137176887d68b07983c9d9c",
                 "size": 10485760,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_4.dat",
                 "url": "",
-                "md5": "a7068784de0ae4249d46f8db90433d5acdfe297a83ca7df22909e86194cd24b1",
+                "md5": "c9d014c3b4fe729a79790e5add62d581b5d3b7eee612f2b1f610ce48f5467e38",
                 "size": 10485760,
                 "metadata": {}
             }
