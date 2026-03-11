@@ -3562,5 +3562,105 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.20260311.155032",
+            "expires_at": 1775811033,
+            "files": [
+                {
+                    "path": "AvUpdateProject.exe",
+                    "url": "",
+                    "md5": "38e1ceeccafe9d41cca73e2f510ab5f713f241989bd481d39316a106dd955c20",
+                    "size": 283136,
+                    "metadata": {}
+                },
+                {
+                    "path": "MyService.exe",
+                    "url": "",
+                    "md5": "870c94b8cff52bb6145f60777c4b606de6d874c5b5c3b17b856a5b9a23db3355",
+                    "size": 915296,
+                    "metadata": {}
+                },
+                {
+                    "path": "ScannerEngine.dll",
+                    "url": "",
+                    "md5": "7d04ecb9c977a3f73d186e157e960453e0611135eb444fc6fea70820acc96e2e",
+                    "size": 150016,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_0.dat",
+                    "url": "",
+                    "md5": "e8065a4119a096461ad0c364fb34c51884d7b49dc0f5b02b418dcdadc2dc9aa5",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_1.dat",
+                    "url": "",
+                    "md5": "2467786f7e76a22f4807da862b422d221aac7366f88f6e2659b92728e32a9767",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_2.dat",
+                    "url": "",
+                    "md5": "1955389148ca2ebb7e80d6cd8fd01c04eccf6ddf3e82e64c2d73241cd569d297",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_3.dat",
+                    "url": "",
+                    "md5": "8a339b34fb23bdb1fa54cb2d95dd778979db39a64560653697a0d740c06befd6",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_4.dat",
+                    "url": "",
+                    "md5": "4007e3f1870174e6c4b7fdad3fc23d170208d17512e78e266e01e27a417246d6",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_5.dat",
+                    "url": "",
+                    "md5": "49a0a7d3f8361ad68dffdc4c77558073c6801e5b3827ed580d2e80e96564a69b",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_6.dat",
+                    "url": "",
+                    "md5": "b0af463f7cd2aeeb07e47a54bfe0d46f849c688ab727819c0bd105d1097ff503",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_7.dat",
+                    "url": "",
+                    "md5": "5e820ea3cde678f6531a2532749d3878f9533b1731f32af624db8eb87d9b7652",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_8.dat",
+                    "url": "",
+                    "md5": "00495d653f9cb3861b5d75bcdbba584ac1e12f47f2858bbe565aa179b0a0c8a4",
+                    "size": 1048576,
+                    "metadata": {}
+                },
+                {
+                    "path": "heavy_payloads/database_pack_9.dat",
+                    "url": "",
+                    "md5": "e1a21d22924811ef3468261fe7b47d2a65275ebee0c3a43098b8e4e671f49ba7",
+                    "size": 1048576,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
