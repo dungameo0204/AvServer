@@ -18,22 +18,17 @@ def calculate_sha256(filepath):
 
 # 1. TỰ ĐỘNG SINH DỮ LIỆU MỚI TINH ĐỂ ĐỔI HASH
 def generate_dummy_files(target_dir, num_files=10, size_mb=1): 
-    # Mẹo: Tôi giảm xuống 10MB/file (Tổng 40MB) để test cho lẹ. Bác thích thì đổi lại 50 nhé.
     os.makedirs(target_dir, exist_ok=True)
     print(f"[*] Dang tao MOI {num_files} file nang, moi file {size_mb}MB (Mat chut thoi gian)...")
     
     for i in range(num_files):
         filepath = os.path.join(target_dir, f"database_pack_{i}.dat")
-        
-        # BỎ ĐIỀU KIỆN IF EXISTS -> Bắt buộc ghi đè dữ liệu ngẫu nhiên (urandom) mỗi lần chạy
         with open(filepath, "wb") as f:
             f.write(os.urandom(size_mb * 1024 * 1024))
         print(f"  -> Da thay mau file: {filepath}")
 
 # 2. TỰ ĐỘNG TĂNG VERSION THEO THỜI GIAN THỰC
 def get_auto_version():
-    # Lấy thời gian thực làm Version: VD "2.0.20260309.1530"
-    # Đảm bảo Version lần sau LUÔN LỚN HƠN lần trước
     return datetime.now().strftime("2.0.%Y%m%d.%H%M%S")
 
 def build_release():
@@ -47,7 +42,10 @@ def build_release():
     print("\n[*] Dang tinh toan ma SHA-256 & Size...")
     
     for root, dirs, files in os.walk(SERVER_DIR):
-        if ".vs" in root: continue # Bỏ qua rác của Visual Studio
+        # =====================================================================
+        # [MA THUẬT] CẮT ĐỨT ĐƯỜNG ĐI VÀO THƯ MỤC RÁC TỪ TRONG TRỨNG NƯỚC
+        # =====================================================================
+        dirs[:] = [d for d in dirs if not d.startswith('.') and d != '__pycache__']
         
         for file in files:
             if file in ["update_controller.json", "update_history.json"]:
@@ -64,6 +62,9 @@ def build_release():
                 "metadata": {}
             })
             print(f"  -> {rel_path} (OK)")
+
+    # Sắp xếp lại danh sách theo bảng chữ cái cho đẹp mắt dễ nhìn
+    manifest_files.sort(key=lambda x: x['path'])
 
     release_info = {
         "has_update": True,
@@ -85,7 +86,10 @@ def build_release():
     history_data = []
     if os.path.exists(history_path):
         with open(history_path, "r", encoding="utf-8") as f:
-            history_data = json.load(f)
+            try:
+                history_data = json.load(f)
+            except json.JSONDecodeError:
+                history_data = [] # Chống crash nếu file cũ bị lỗi format
             
     history_data = [item for item in history_data if item.get("manifest", {}).get("version") != LATEST_VERSION]
     history_data.append(release_info) 
