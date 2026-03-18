@@ -1,14 +1,14 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260318.140636",
-        "expires_at": 1776409596,
+        "version": "2.0.20260318.142847",
+        "expires_at": 1776410927,
         "files": [
             {
                 "path": "AvUpdateProject.exe",
                 "url": "",
-                "md5": "33a7188fdb318f6a48a1bfc76a389c9c0426c23c46cc96849313819bef7a2109",
-                "size": 373248,
+                "md5": "0694ceb85b6ad59dafff263b243fca7c4ec9fada035a455992ff048b3a800397",
+                "size": 1853952,
                 "metadata": {}
             },
             {
@@ -35,70 +35,70 @@
             {
                 "path": "heavy_payloads/database_pack_0.dat",
                 "url": "",
-                "md5": "c196599f8c47a4916f144640134f28550de3ffc7edfc8fc9cdac6d7d1c0593b1",
+                "md5": "bdc714e3b1e6733cb3aee979a581e5c9d9e5150e75cb166fd7561500088cc98c",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_1.dat",
                 "url": "",
-                "md5": "8aab0fb8d88193442fea6f12407efa511ad643e4bc7f1ecdc4f942fcfb633901",
+                "md5": "5917f956e924da4556464af8290814664424315b582a882d62d19ac0d2b4a64d",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_2.dat",
                 "url": "",
-                "md5": "d80a1c62e96ec385c8ef9cd620869a9d2c0916b98fdda20d104768c9e3ae1180",
+                "md5": "db50fdc6e7dbac16d36edfbac1f000a500ad9cfd6f524a37bcbe175f26473b31",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_3.dat",
                 "url": "",
-                "md5": "16bbfcc71ae6d86438a9c593b9c700c88bd325e98e444e411d4b973275215d7e",
+                "md5": "1f0159407e814fdf17d692f19b2a99be0de509a5024c2d956be73b3fd7ed6130",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_4.dat",
                 "url": "",
-                "md5": "07d9d718f3beb90b1b3d992ee59f9526186b8ec17edc66ea9dec37cb894e3118",
+                "md5": "1fff9eb81b41a9c3077837566cc7900a5a7c97eae45087c13460456a2dbf1dc5",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_5.dat",
                 "url": "",
-                "md5": "74bb41a9d2cb8b2741f24cd60ec8a754eaf4a1981bd68eb097de59592499cfe9",
+                "md5": "6436a28504f7d3cccbe096036484f959af84f3b1f2ffe6e04243e3d80f02d7f2",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_6.dat",
                 "url": "",
-                "md5": "de03ee021a8c76d51c75c8183a2c84248ef1c6adc68a0443bcfc04a5306d3ebb",
+                "md5": "a5441076d7941f0a3a03d70cbc9ae28716f10cc6d5e2ca82530937655cd82809",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_7.dat",
                 "url": "",
-                "md5": "2fb27dc2288b329523491fd49e87d147e418496c980d666fc66dad75a18b754a",
+                "md5": "0e0fd438044fb542c26796e7dceb8ac2cb5618ad2874679e7d9d8afb2bce7f92",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_8.dat",
                 "url": "",
-                "md5": "73983c2331a1a0f625e4fa4a0895769930a1507f09f9c525fbc8a472a30b0bb5",
+                "md5": "1e0d145818c62813538d44a949dcab939f3184ac1e968cb705aa90cf5d6f7322",
                 "size": 1048576,
                 "metadata": {}
             },
             {
                 "path": "heavy_payloads/database_pack_9.dat",
                 "url": "",
-                "md5": "055b911395f1791f505676fd42ca46b9ca6d0b960b7c871928eb8af545603ad7",
+                "md5": "deff1eda7012bf34264ed59992b0c4dfc73854b36cefb402b1599ebf7c2aaee1",
                 "size": 1048576,
                 "metadata": {}
             }
