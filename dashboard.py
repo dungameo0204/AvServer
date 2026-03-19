@@ -1,44 +1,269 @@
-import tkinter as tk
-from tkinter import messagebox
+from flask import Flask, render_template_string, jsonify, request
 import subprocess
 import os
 
-def run_release_builder():
-    try:
-        # Chạy file Python xử lý logic của bạn
-        subprocess.run(["python", "ReleaseBuilder.py"], check=True)
-        log_text.insert(tk.END, "Successfully ran ReleaseBuilder.py\n")
-    except Exception as e:
-        messagebox.showerror("Error", f"Failed to run builder: {e}")
+app = Flask(__name__)
 
+# Thư mục gốc chứa server (Lấy đường dẫn thư mục hiện tại)
+BASE_DIR = os.path.abspath('.')
+
+HTML_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AvServer Manager Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 30px 0;}
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 700px; }
+        h2 { color: #333; margin-top: 0; text-align: center; }
+        h3 { color: #555; text-align: left; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 25px; display: flex; justify-content: space-between; align-items: center;}
+        
+        /* Buttons */
+        .btn-main { width: 100%; padding: 12px; margin: 10px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; transition: 0.3s; }
+        .btn-build { background-color: #0078D7; }
+        .btn-build:hover { background-color: #005A9E; }
+        .btn-push { background-color: #107C10; }
+        .btn-push:hover { background-color: #0B5A0B; }
+        
+        /* Micro Buttons for Tree */
+        .btn-sm { padding: 3px 8px; font-size: 12px; border: none; border-radius: 3px; cursor: pointer; color: white; font-weight: bold; }
+        .bg-blue { background: #0078D7; }
+        .bg-blue:hover { background: #005A9E; }
+        .bg-red { background: #dc3545; }
+        .bg-red:hover { background: #c82333; }
+        
+        /* Tree View Styles */
+        .tree-box { max-height: 350px; overflow-y: auto; background: #fafafa; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
+        ul.tree { list-style: none; padding-left: 20px; margin: 0; text-align: left; }
+        ul.tree-root { padding-left: 0; }
+        ul.tree li { margin: 5px 0; }
+        summary { cursor: pointer; font-weight: bold; background: #e9ecef; padding: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+        summary:hover { background: #dee2e6; }
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px dashed #ddd; margin-left: 15px; background: white;}
+        .file-item:hover { background: #f8f9fa; }
+        
+        /* Log Terminal */
+        .log-box { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 5px; text-align: left; height: 180px; overflow-y: auto; font-family: monospace; font-size: 13px; margin-top: 20px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>☁️ Server Management Dashboard</h2>
+        
+        <input type="file" id="fileUpload" style="display:none" onchange="doUpload()">
+        
+        <div class="file-manager">
+            <h3>
+                <span>📂 File Explorer (Workspace)</span>
+                <button class="btn-sm bg-blue" onclick="prepareUpload('.')">📤 Thêm file vào Root</button>
+            </h3>
+            <div class="tree-box" id="treeContainer">
+                </div>
+        </div>
+
+        <h3>⚡ Actions</h3>
+        <button class="btn-main btn-build" onclick="runCommand('/build')">⚙️ 1. Build Manifest (Python)</button>
+        <button class="btn-main btn-push" onclick="runCommand('/push')">🚀 2. Push to GitHub</button>
+        
+        <div class="log-box" id="terminal">System Ready...\n</div>
+    </div>
+
+    <script>
+        let targetFolder = '';
+
+        window.onload = loadTree;
+        const terminal = document.getElementById('terminal');
+
+        function logToTerminal(msg, type="info") {
+            let prefix = type === "error" ? "[ERROR] " : type === "success" ? "[SUCCESS] " : "[INFO] ";
+            terminal.innerHTML += prefix + msg + "\\n";
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Lấy cấu trúc HTML của cây thư mục từ Server
+        function loadTree() {
+            fetch('/api/tree')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('treeContainer').innerHTML = html;
+                });
+        }
+
+        // Kích hoạt nút Upload
+        function prepareUpload(folderPath) {
+            targetFolder = folderPath;
+            document.getElementById('fileUpload').click();
+        }
+
+        // Xử lý gửi file lên Server
+        function doUpload() {
+            const fileInput = document.getElementById('fileUpload');
+            if(fileInput.files.length === 0) return;
+            
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("folder", targetFolder);
+
+            logToTerminal("Đang tải file lên thư mục: " + (targetFolder === '.' ? 'Root' : targetFolder), "info");
+            fetch('/upload', { method: 'POST', body: formData })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        logToTerminal(data.message, "success");
+                        fileInput.value = ""; 
+                        loadTree(); 
+                    } else {
+                        logToTerminal(data.message, "error");
+                    }
+                });
+        }
+
+        // Gọi lệnh xóa file
+        function deleteFile(filePath) {
+            if(!confirm(`Xóa file này: ${filePath}?`)) return;
+            
+            fetch('/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: filePath })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    logToTerminal(data.message, "success");
+                    loadTree();
+                } else {
+                    logToTerminal(data.message, "error");
+                }
+            });
+        }
+
+        // Chạy lệnh Build / Push
+        function runCommand(endpoint) {
+            logToTerminal("Executing " + endpoint + "...", "info");
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'success') logToTerminal(data.message, "success");
+                    else logToTerminal(data.message, "error");
+                })
+                .catch(err => logToTerminal("Cannot reach server.", "error"));
+        }
+    </script>
+</body>
+</html>
+"""
+
+# Hàm đệ quy quét thư mục và tạo mã HTML dạng Tree View
+def build_tree_html(current_dir, is_root=False):
+    html = '<ul class="tree tree-root">' if is_root else '<ul class="tree">'
+    try:
+        # Lấy danh sách và sắp xếp: Thư mục đứng trước, file đứng sau
+        items = sorted(os.listdir(current_dir), key=lambda x: (not os.path.isdir(os.path.join(current_dir, x)), x))
+    except Exception:
+        return "</ul>"
+        
+    for item in items:
+        # Ẩn các thư mục rác không cần thiết để sếp đỡ rối mắt
+        if item in ['.git', '.vs', '__pycache__', '.vscode', 'venv']: continue
+        
+        full_path = os.path.join(current_dir, item)
+        rel_path = os.path.relpath(full_path, BASE_DIR).replace('\\', '/')
+        
+        if os.path.isdir(full_path):
+            html += f'''
+            <li>
+                <details open>
+                    <summary>
+                        <span>📁 {item}</span>
+                        <button class="btn-sm bg-blue" onclick="prepareUpload('{rel_path}')">📤 Thêm file</button>
+                    </summary>
+                    {build_tree_html(full_path)}
+                </details>
+            </li>
+            '''
+        else:
+            # Khóa mõm nút Xóa đối với các file code hệ thống (để sếp không lỡ tay xóa nhầm)
+            delete_btn = f'<button class="btn-sm bg-red" onclick="deleteFile(\'{rel_path}\')">🗑️ Xóa</button>'
+            if item.endswith('.py') or item == 'README.md':
+                delete_btn = '<span style="color:gray; font-size:12px;">🔒 Khóa</span>'
+                
+            html += f'<div class="file-item"><span>📄 {item}</span> {delete_btn}</div>'
+            
+    html += '</ul>'
+    return html
+
+@app.route('/')
+def home():
+    return render_template_string(HTML_TEMPLATE)
+
+# Trả về mã HTML của cây thư mục
+@app.route('/api/tree')
+def get_tree():
+    return build_tree_html(BASE_DIR, is_root=True)
+
+# API: Nhận file từ sếp và lưu đúng vào thư mục sếp chọn
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    file = request.files.get('file')
+    folder = request.form.get('folder', '.')
+    
+    if not file or file.filename == '':
+        return jsonify({"status": "error", "message": "Chưa chọn file!"})
+    if file.filename.endswith('.py'):
+        return jsonify({"status": "error", "message": "Bảo mật: Không được phép upload file code Python!"})
+
+    # Xác định đường dẫn an toàn
+    target_dir = os.path.abspath(os.path.join(BASE_DIR, folder))
+    if not target_dir.startswith(BASE_DIR):
+        return jsonify({"status": "error", "message": "Lỗi bảo mật: Thư mục không hợp lệ!"})
+        
+    os.makedirs(target_dir, exist_ok=True)
+    file.save(os.path.join(target_dir, file.filename))
+    return jsonify({"status": "success", "message": f"Đã upload '{file.filename}' vào '{folder}'"})
+
+# API: Xóa file
+@app.route('/delete', methods=['POST'])
+def delete_file():
+    rel_path = request.json.get('path', '')
+    if rel_path.endswith('.py'):
+        return jsonify({"status": "error", "message": "Bảo mật: Không được phép xóa file code!"})
+        
+    target_file = os.path.abspath(os.path.join(BASE_DIR, rel_path))
+    if not target_file.startswith(BASE_DIR) or not os.path.isfile(target_file):
+        return jsonify({"status": "error", "message": "Lỗi bảo mật: File không hợp lệ!"})
+        
+    try:
+        os.remove(target_file)
+        return jsonify({"status": "success", "message": f"Đã xóa file: {rel_path}"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"Không thể xóa (File đang mở?): {str(e)}"})
+
+@app.route('/build')
+def build_manifest():
+    try:
+        # [BẢN VÁ]: ÉP ĐỌC TIẾNG VIỆT BẰNG "-X utf8" VÀ "encoding='utf-8'"
+        result = subprocess.run(["python", "-X", "utf8", "ReleaseBuilder.py"], capture_output=True, text=True, check=True, encoding='utf-8')
+        return jsonify({"status": "success", "message": "Build thành công!\n" + result.stdout})
+    except subprocess.CalledProcessError as e:
+        return jsonify({"status": "error", "message": f"Lỗi Build: {e.stderr}"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
+@app.route('/push')
 def git_push():
     try:
-        commands = [
-            ["git", "add", "."],
-            ["git", "commit", "-m", "Manual update via Dashboard"],
-            ["git", "push", "origin", "main"]
-        ]
-        for cmd in commands:
-            subprocess.run(cmd, check=True)
-        log_text.insert(tk.END, "Successfully pushed to GitHub!\n")
-        messagebox.showinfo("Success", "Server updated successfully!")
-    except Exception as e:
-        messagebox.showerror("Error", f"Git error: {e}")
+        # [BẢN VÁ]: Ép UTF-8 cho các lệnh Git để không bị lỗi font
+        subprocess.run(["git", "add", "."], check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", "Manager Update via Explorer UI"], check=True, capture_output=True)
+        result = subprocess.run(["git", "push", "origin", "main"], check=True, capture_output=True, text=True, encoding='utf-8')
+        return jsonify({"status": "success", "message": "Push lên GitHub thành công!\n" + result.stdout})
+    except subprocess.CalledProcessError as e:
+        if "nothing to commit" in str(e.stdout):
+            return jsonify({"status": "success", "message": "Code đã mới nhất, không có gì để push!"})
+        return jsonify({"status": "error", "message": f"Lỗi Git: {e.stderr}"})
 
-# Giao diện
-root = tk.Tk()
-root.title("AvServer Manager Dashboard")
-root.geometry("400x300")
-
-tk.Label(root, text="Server Management", font=("Arial", 14, "bold")).pack(pady=10)
-
-tk.Button(root, text="1. Build Manifest (Python)", command=run_release_builder, 
-          bg="#e1e1e1", width=25).pack(pady=5)
-
-tk.Button(root, text="2. Push to GitHub", command=git_push, 
-          bg="#4CAF50", fg="white", width=25).pack(pady=5)
-
-log_text = tk.Text(root, height=8, width=45)
-log_text.pack(pady=10)
-
-root.mainloop()
+if __name__ == '__main__':
+    print("🚀 Server Explorer đang chạy! Gửi IP:5000 cho sếp nhé!")
+    app.run(host='0.0.0.0', port=5000, debug=True)
