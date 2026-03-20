@@ -10569,5 +10569,56 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.20260320.170750",
+            "expires_at": 1776593270,
+            "files": [
+                {
+                    "path": "1. Nh\u00f3m Giao ti\u1ebfp & T\u01b0\u01a1ng t\u00e1c (IPC.txt",
+                    "url": "",
+                    "md5": "00ba43f024b41194e3e78f31136fe1527a555016f68b81052889b67d8da37dd5",
+                    "size": 4579,
+                    "metadata": {}
+                },
+                {
+                    "path": "AvUpdateProject.exe",
+                    "url": "",
+                    "md5": "0457d5de1230873d684c3486d77ce9d4cac5d81bed29e29ed8701af70b8eb091",
+                    "size": 573952,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/NcsFwSvc.dll",
+                    "url": "",
+                    "md5": "80e766e969499e5502f67339cbe6f6b369ad9075f7c6000aebb522985b88aba4",
+                    "size": 2791424,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/SvcBC.dll",
+                    "url": "",
+                    "md5": "b045e4545ee68b7c6e0ab967f894934da2ab8b2069552b591252e95bdef8c343",
+                    "size": 1516032,
+                    "metadata": {}
+                },
+                {
+                    "path": "modules.json",
+                    "url": "",
+                    "md5": "ca48437bd67267a2ee66ce3859dcfcfcf0de17bb82ccc49df4f654d840002991",
+                    "size": 456,
+                    "metadata": {}
+                },
+                {
+                    "path": "version.txt",
+                    "url": "",
+                    "md5": "23960c292beb5f92b322e0a2f74eab302b35b877d5d04b77a7a5611cf1dfb8de",
+                    "size": 72,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
