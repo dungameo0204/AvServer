@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# Thư mục gốc chứa server (Lấy đường dẫn thư mục hiện tại)
+# Thư mục gốc chứa server
 BASE_DIR = os.path.abspath('.')
 
 HTML_TEMPLATE = """
@@ -37,10 +37,12 @@ HTML_TEMPLATE = """
         .tree-box { max-height: 350px; overflow-y: auto; background: #fafafa; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
         ul.tree { list-style: none; padding-left: 20px; margin: 0; text-align: left; }
         ul.tree-root { padding-left: 0; }
-        ul.tree li { margin: 5px 0; }
+        ul.tree li { margin: 2px 0; }
         summary { cursor: pointer; font-weight: bold; background: #e9ecef; padding: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; user-select: none; }
         summary:hover { background: #dee2e6; }
-        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px dashed #ddd; margin-left: 15px; background: white;}
+        
+        /* BẢN VÁ: Xóa margin-left để thẳng hàng với thư mục */
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px dashed #ddd; background: white;}
         .file-item:hover { background: #f8f9fa; }
         
         /* Log Terminal */
@@ -81,22 +83,19 @@ HTML_TEMPLATE = """
             terminal.scrollTop = terminal.scrollHeight;
         }
 
-        // Lấy cấu trúc HTML của cây thư mục từ Server
         function loadTree() {
-            fetch('/api/tree')
+            fetch('/api/tree?t=' + Date.now(), { cache: 'no-store' })
                 .then(res => res.text())
                 .then(html => {
                     document.getElementById('treeContainer').innerHTML = html;
                 });
         }
 
-        // Kích hoạt nút Upload
         function prepareUpload(folderPath) {
             targetFolder = folderPath;
             document.getElementById('fileUpload').click();
         }
 
-        // Xử lý gửi file lên Server
         function doUpload() {
             const fileInput = document.getElementById('fileUpload');
             if(fileInput.files.length === 0) return;
@@ -119,7 +118,6 @@ HTML_TEMPLATE = """
                 });
         }
 
-        // Gọi lệnh xóa file
         function deleteFile(filePath) {
             if(!confirm(`Xóa file này: ${filePath}?`)) return;
             
@@ -139,10 +137,9 @@ HTML_TEMPLATE = """
             });
         }
 
-        // Chạy lệnh Build / Push
         function runCommand(endpoint) {
             logToTerminal("Executing " + endpoint + "...", "info");
-            fetch(endpoint)
+            fetch(endpoint + '?t=' + Date.now(), { cache: 'no-store' })
                 .then(response => response.json())
                 .then(data => {
                     if(data.status === 'success') logToTerminal(data.message, "success");
@@ -155,26 +152,25 @@ HTML_TEMPLATE = """
 </html>
 """
 
-# Hàm đệ quy quét thư mục và tạo mã HTML dạng Tree View
+# Hàm đệ quy quét thư mục
 def build_tree_html(current_dir, is_root=False):
     html = '<ul class="tree tree-root">' if is_root else '<ul class="tree">'
     try:
-        # Lấy danh sách và sắp xếp: Thư mục đứng trước, file đứng sau
-        items = sorted(os.listdir(current_dir), key=lambda x: (not os.path.isdir(os.path.join(current_dir, x)), x))
+        items = sorted(os.listdir(current_dir), key=lambda x: (not os.path.isdir(os.path.join(current_dir, x)), x.lower()))
     except Exception:
         return "</ul>"
         
     for item in items:
-        # Ẩn các thư mục rác không cần thiết để sếp đỡ rối mắt
         if item in ['.git', '.vs', '__pycache__', '.vscode', 'venv']: continue
         
         full_path = os.path.join(current_dir, item)
         rel_path = os.path.relpath(full_path, BASE_DIR).replace('\\', '/')
         
         if os.path.isdir(full_path):
+            # BẢN VÁ: Bỏ chữ "open" ở thẻ details
             html += f'''
             <li>
-                <details open>
+                <details>
                     <summary>
                         <span>📁 {item}</span>
                         <button class="btn-sm bg-blue" onclick="prepareUpload('{rel_path}')">📤 Thêm file</button>
@@ -184,12 +180,12 @@ def build_tree_html(current_dir, is_root=False):
             </li>
             '''
         else:
-            # Khóa mõm nút Xóa đối với các file code hệ thống (để sếp không lỡ tay xóa nhầm)
             delete_btn = f'<button class="btn-sm bg-red" onclick="deleteFile(\'{rel_path}\')">🗑️ Xóa</button>'
             if item.endswith('.py') or item == 'README.md':
                 delete_btn = '<span style="color:gray; font-size:12px;">🔒 Khóa</span>'
                 
-            html += f'<div class="file-item"><span>📄 {item}</span> {delete_btn}</div>'
+            # BẢN VÁ: Gói thẻ div vào trong thẻ <li>
+            html += f'<li><div class="file-item"><span>📄 {item}</span> {delete_btn}</div></li>'
             
     html += '</ul>'
     return html
@@ -198,12 +194,10 @@ def build_tree_html(current_dir, is_root=False):
 def home():
     return render_template_string(HTML_TEMPLATE)
 
-# Trả về mã HTML của cây thư mục
 @app.route('/api/tree')
 def get_tree():
     return build_tree_html(BASE_DIR, is_root=True)
 
-# API: Nhận file từ sếp và lưu đúng vào thư mục sếp chọn
 @app.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files.get('file')
@@ -214,7 +208,6 @@ def upload_file():
     if file.filename.endswith('.py'):
         return jsonify({"status": "error", "message": "Bảo mật: Không được phép upload file code Python!"})
 
-    # Xác định đường dẫn an toàn
     target_dir = os.path.abspath(os.path.join(BASE_DIR, folder))
     if not target_dir.startswith(BASE_DIR):
         return jsonify({"status": "error", "message": "Lỗi bảo mật: Thư mục không hợp lệ!"})
@@ -223,7 +216,6 @@ def upload_file():
     file.save(os.path.join(target_dir, file.filename))
     return jsonify({"status": "success", "message": f"Đã upload '{file.filename}' vào '{folder}'"})
 
-# API: Xóa file
 @app.route('/delete', methods=['POST'])
 def delete_file():
     rel_path = request.json.get('path', '')
@@ -243,7 +235,6 @@ def delete_file():
 @app.route('/build')
 def build_manifest():
     try:
-        # [BẢN VÁ]: ÉP ĐỌC TIẾNG VIỆT BẰNG "-X utf8" VÀ "encoding='utf-8'"
         result = subprocess.run(["python", "-X", "utf8", "ReleaseBuilder.py"], capture_output=True, text=True, check=True, encoding='utf-8')
         return jsonify({"status": "success", "message": "Build thành công!\n" + result.stdout})
     except subprocess.CalledProcessError as e:
@@ -254,7 +245,6 @@ def build_manifest():
 @app.route('/push')
 def git_push():
     try:
-        # [BẢN VÁ]: Ép UTF-8 cho các lệnh Git để không bị lỗi font
         subprocess.run(["git", "add", "."], check=True, capture_output=True)
         subprocess.run(["git", "commit", "-m", "Manager Update via Explorer UI"], check=True, capture_output=True)
         result = subprocess.run(["git", "push", "origin", "main"], check=True, capture_output=True, text=True, encoding='utf-8')

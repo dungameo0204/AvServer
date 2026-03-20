@@ -1,0 +1,20 @@
+{
+  "healthCheckIntervalMs": 5000,
+  "modules": [
+    {
+      "config": {
+        "enableDomainBlocking": true,
+        "enableJsonPipeServer": true
+      },
+      "dll": "NcsFwSvc.dll",
+      "enabled": false,
+      "entryPoint": "GetEdrModuleApi",
+      "id": "NcsFwSvc",
+      "restartDelayMs": 5000,
+      "restartOnFailure": true,
+      "startTimeoutMs": 30000
+    }
+  ],
+  "modulesDirectory": "Modules",
+  "startTimeoutMs": 30000
+}
