@@ -20,11 +20,11 @@ HTML_TEMPLATE = """
         h3 { color: #555; text-align: left; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 25px; display: flex; justify-content: space-between; align-items: center;}
         
         /* Buttons */
-        .btn-main { width: 100%; padding: 12px; margin: 10px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; transition: 0.3s; }
-        .btn-build { background-color: #0078D7; }
-        .btn-build:hover { background-color: #005A9E; }
-        .btn-push { background-color: #107C10; }
-        .btn-push:hover { background-color: #0B5A0B; }
+        .btn-main { width: 100%; padding: 15px; margin: 10px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; transition: 0.3s; }
+        /* Nút Deploy Gộp 2 Trong 1 */
+        .btn-deploy { background-color: #FF5722; box-shadow: 0 4px 6px rgba(255,87,34,0.3); }
+        .btn-deploy:hover { background-color: #E64A19; transform: translateY(-1px); }
+        .btn-deploy:active { transform: translateY(1px); }
         
         /* Micro Buttons for Tree */
         .btn-sm { padding: 3px 8px; font-size: 12px; border: none; border-radius: 3px; cursor: pointer; color: white; font-weight: bold; }
@@ -41,7 +41,6 @@ HTML_TEMPLATE = """
         summary { cursor: pointer; font-weight: bold; background: #e9ecef; padding: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; user-select: none; }
         summary:hover { background: #dee2e6; }
         
-        /* BẢN VÁ: Xóa margin-left để thẳng hàng với thư mục */
         .file-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px dashed #ddd; background: white;}
         .file-item:hover { background: #f8f9fa; }
         
@@ -65,8 +64,7 @@ HTML_TEMPLATE = """
         </div>
 
         <h3>⚡ Actions</h3>
-        <button class="btn-main btn-build" onclick="runCommand('/build')">⚙️ 1. Build Manifest (Python)</button>
-        <button class="btn-main btn-push" onclick="runCommand('/push')">🚀 2. Push to GitHub</button>
+        <button id="deployBtn" class="btn-main btn-deploy" onclick="autoDeploy()">🚀 ONE-CLICK DEPLOY (BUILD & PUSH)</button>
         
         <div class="log-box" id="terminal">System Ready...\n</div>
     </div>
@@ -76,6 +74,7 @@ HTML_TEMPLATE = """
 
         window.onload = loadTree;
         const terminal = document.getElementById('terminal');
+        const deployBtn = document.getElementById('deployBtn');
 
         function logToTerminal(msg, type="info") {
             let prefix = type === "error" ? "[ERROR] " : type === "success" ? "[SUCCESS] " : "[INFO] ";
@@ -137,15 +136,47 @@ HTML_TEMPLATE = """
             });
         }
 
-        function runCommand(endpoint) {
-            logToTerminal("Executing " + endpoint + "...", "info");
-            fetch(endpoint + '?t=' + Date.now(), { cache: 'no-store' })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.status === 'success') logToTerminal(data.message, "success");
-                    else logToTerminal(data.message, "error");
-                })
-                .catch(err => logToTerminal("Cannot reach server.", "error"));
+        // ==========================================
+        // HÀM MỚI: GỘP BUILD VÀ PUSH VÀO MỘT LUỒNG
+        // ==========================================
+        async function autoDeploy() {
+            deployBtn.disabled = true;
+            deployBtn.innerText = "⏳ ĐANG XỬ LÝ (XIN CHỜ VÀI GIÂY)...";
+            deployBtn.style.backgroundColor = "gray";
+
+            try {
+                // Bước 1: Gọi Build Manifest
+                logToTerminal("--- BƯỚC 1: ĐÓNG GÓI PHIÊN BẢN (BUILD) ---", "info");
+                let buildRes = await fetch('/build?t=' + Date.now(), { cache: 'no-store' });
+                let buildData = await buildRes.json();
+                
+                if (buildData.status === 'success') {
+                    logToTerminal(buildData.message, "success");
+                    loadTree(); // Cập nhật lại list file để thấy JSON mới
+                    
+                    // Bước 2: Gọi Push Git
+                    logToTerminal("--- BƯỚC 2: ĐẨY LÊN GITHUB (PUSH) ---", "info");
+                    let pushRes = await fetch('/push?t=' + Date.now(), { cache: 'no-store' });
+                    let pushData = await pushRes.json();
+
+                    if (pushData.status === 'success') {
+                        logToTerminal(pushData.message, "success");
+                        logToTerminal("🎉 HOÀN TẤT! HỆ THỐNG ĐÃ CẬP NHẬT. (Đợi 3-5 phút để CDN đồng bộ)", "success");
+                    } else {
+                        logToTerminal(pushData.message, "error");
+                    }
+                } else {
+                    logToTerminal(buildData.message, "error");
+                    logToTerminal("Hủy Push do lỗi Build!", "error");
+                }
+            } catch (err) {
+                logToTerminal("Lỗi kết nối Server: " + err.message, "error");
+            } finally {
+                // Khôi phục nút
+                deployBtn.disabled = false;
+                deployBtn.innerText = "🚀 ONE-CLICK DEPLOY (BUILD & PUSH)";
+                deployBtn.style.backgroundColor = ""; 
+            }
         }
     </script>
 </body>
@@ -167,7 +198,6 @@ def build_tree_html(current_dir, is_root=False):
         rel_path = os.path.relpath(full_path, BASE_DIR).replace('\\', '/')
         
         if os.path.isdir(full_path):
-            # BẢN VÁ: Bỏ chữ "open" ở thẻ details
             html += f'''
             <li>
                 <details>
@@ -184,7 +214,6 @@ def build_tree_html(current_dir, is_root=False):
             if item.endswith('.py') or item == 'README.md':
                 delete_btn = '<span style="color:gray; font-size:12px;">🔒 Khóa</span>'
                 
-            # BẢN VÁ: Gói thẻ div vào trong thẻ <li>
             html += f'<li><div class="file-item"><span>📄 {item}</span> {delete_btn}</div></li>'
             
     html += '</ul>'
@@ -246,7 +275,7 @@ def build_manifest():
 def git_push():
     try:
         subprocess.run(["git", "add", "."], check=True, capture_output=True)
-        subprocess.run(["git", "commit", "-m", "Manager Update via Explorer UI"], check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", "Auto Deploy Update"], check=True, capture_output=True)
         result = subprocess.run(["git", "push", "origin", "main"], check=True, capture_output=True, text=True, encoding='utf-8')
         return jsonify({"status": "success", "message": "Push lên GitHub thành công!\n" + result.stdout})
     except subprocess.CalledProcessError as e:
