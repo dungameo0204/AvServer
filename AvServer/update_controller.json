@@ -1,8 +1,8 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260320.162650",
-        "expires_at": 1776590810,
+        "version": "2.0.20260320.163447",
+        "expires_at": 1776591287,
         "files": [
             {
                 "path": "1. Nh\u00f3m Giao ti\u1ebfp & T\u01b0\u01a1ng t\u00e1c (IPC.txt",
@@ -16,13 +16,6 @@
                 "url": "",
                 "md5": "8bc8e19fd1d93ef216f77b4bdcb2b32ee494c74a35af3d7eb9b033d33ad01865",
                 "size": 574464,
-                "metadata": {}
-            },
-            {
-                "path": "EdrServiceHost.exe",
-                "url": "",
-                "md5": "bdec6c3dfc9129bfd71d4f7c0c3f67771bc2f27b4de78c77f5f2821e37c5e7f8",
-                "size": 611840,
                 "metadata": {}
             },
             {
@@ -49,7 +42,7 @@
             {
                 "path": "version.txt",
                 "url": "",
-                "md5": "220066d5b073a88895e942c808889b72ee98e44aa3ecc63eea86cff24d17f9cb",
+                "md5": "485faa74725233e2f126878e11c7e22bbc862abeecc4e76e0dd4eeda09e4f978",
                 "size": 72,
                 "metadata": {}
             }
