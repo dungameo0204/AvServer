@@ -1,8 +1,8 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260320.180358",
-        "expires_at": 1776596638,
+        "version": "2.0.20260320.181111",
+        "expires_at": 1776597071,
         "files": [
             {
                 "path": "AvUpdateProject.exe",
@@ -35,7 +35,7 @@
             {
                 "path": "version.txt",
                 "url": "",
-                "md5": "90c068f18062336c92640499ee0bb4e5bbd940995d3e4a667c0891d54766d5b8",
+                "md5": "39c00bd7dc4b36e5d226395701099b4531c60c5e6cf54de10e090012361c1242",
                 "size": 72,
                 "metadata": {}
             }
