@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)
 
-# Thư mục gốc chứa server
 BASE_DIR = os.path.abspath('.')
 
 HTML_TEMPLATE = """
@@ -19,21 +18,17 @@ HTML_TEMPLATE = """
         h2 { color: #333; margin-top: 0; text-align: center; }
         h3 { color: #555; text-align: left; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 25px; display: flex; justify-content: space-between; align-items: center;}
         
-        /* Buttons */
         .btn-main { width: 100%; padding: 15px; margin: 10px 0; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; transition: 0.3s; }
-        /* Nút Deploy Gộp 2 Trong 1 */
         .btn-deploy { background-color: #FF5722; box-shadow: 0 4px 6px rgba(255,87,34,0.3); }
         .btn-deploy:hover { background-color: #E64A19; transform: translateY(-1px); }
         .btn-deploy:active { transform: translateY(1px); }
         
-        /* Micro Buttons for Tree */
         .btn-sm { padding: 3px 8px; font-size: 12px; border: none; border-radius: 3px; cursor: pointer; color: white; font-weight: bold; }
         .bg-blue { background: #0078D7; }
         .bg-blue:hover { background: #005A9E; }
         .bg-red { background: #dc3545; }
         .bg-red:hover { background: #c82333; }
         
-        /* Tree View Styles */
         .tree-box { max-height: 350px; overflow-y: auto; background: #fafafa; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
         ul.tree { list-style: none; padding-left: 20px; margin: 0; text-align: left; }
         ul.tree-root { padding-left: 0; }
@@ -44,7 +39,6 @@ HTML_TEMPLATE = """
         .file-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px dashed #ddd; background: white;}
         .file-item:hover { background: #f8f9fa; }
         
-        /* Log Terminal */
         .log-box { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 5px; text-align: left; height: 180px; overflow-y: auto; font-family: monospace; font-size: 13px; margin-top: 20px; white-space: pre-wrap; }
     </style>
 </head>
@@ -60,7 +54,7 @@ HTML_TEMPLATE = """
                 <button class="btn-sm bg-blue" onclick="prepareUpload('.')">📤 Thêm file vào Root</button>
             </h3>
             <div class="tree-box" id="treeContainer">
-                </div>
+            </div>
         </div>
 
         <h3>⚡ Actions</h3>
@@ -71,7 +65,6 @@ HTML_TEMPLATE = """
 
     <script>
         let targetFolder = '';
-
         window.onload = loadTree;
         const terminal = document.getElementById('terminal');
         const deployBtn = document.getElementById('deployBtn');
@@ -136,25 +129,20 @@ HTML_TEMPLATE = """
             });
         }
 
-        // ==========================================
-        // HÀM MỚI: GỘP BUILD VÀ PUSH VÀO MỘT LUỒNG
-        // ==========================================
         async function autoDeploy() {
             deployBtn.disabled = true;
             deployBtn.innerText = "⏳ ĐANG XỬ LÝ (XIN CHỜ VÀI GIÂY)...";
             deployBtn.style.backgroundColor = "gray";
 
             try {
-                // Bước 1: Gọi Build Manifest
                 logToTerminal("--- BƯỚC 1: ĐÓNG GÓI PHIÊN BẢN (BUILD) ---", "info");
                 let buildRes = await fetch('/build?t=' + Date.now(), { cache: 'no-store' });
                 let buildData = await buildRes.json();
                 
                 if (buildData.status === 'success') {
                     logToTerminal(buildData.message, "success");
-                    loadTree(); // Cập nhật lại list file để thấy JSON mới
+                    loadTree(); 
                     
-                    // Bước 2: Gọi Push Git
                     logToTerminal("--- BƯỚC 2: ĐẨY LÊN GITHUB (PUSH) ---", "info");
                     let pushRes = await fetch('/push?t=' + Date.now(), { cache: 'no-store' });
                     let pushData = await pushRes.json();
@@ -172,7 +160,6 @@ HTML_TEMPLATE = """
             } catch (err) {
                 logToTerminal("Lỗi kết nối Server: " + err.message, "error");
             } finally {
-                // Khôi phục nút
                 deployBtn.disabled = false;
                 deployBtn.innerText = "🚀 ONE-CLICK DEPLOY (BUILD & PUSH)";
                 deployBtn.style.backgroundColor = ""; 
@@ -183,7 +170,6 @@ HTML_TEMPLATE = """
 </html>
 """
 
-# Hàm đệ quy quét thư mục
 def build_tree_html(current_dir, is_root=False):
     html = '<ul class="tree tree-root">' if is_root else '<ul class="tree">'
     try:
@@ -211,7 +197,12 @@ def build_tree_html(current_dir, is_root=False):
             '''
         else:
             delete_btn = f'<button class="btn-sm bg-red" onclick="deleteFile(\'{rel_path}\')">🗑️ Xóa</button>'
-            if item.endswith('.py') or item == 'README.md':
+            
+            # =========================================================
+            # BẢN VÁ 1: DANH SÁCH CÁC FILE "BẤT TỬ" CẤM XÓA TRÊN UI
+            # =========================================================
+            locked_files = ['README.md', '.gitattributes', 'update_controller.json', 'update_history.json', 'version.txt']
+            if item.endswith('.py') or item in locked_files:
                 delete_btn = '<span style="color:gray; font-size:12px;">🔒 Khóa</span>'
                 
             html += f'<li><div class="file-item"><span>📄 {item}</span> {delete_btn}</div></li>'
@@ -248,8 +239,13 @@ def upload_file():
 @app.route('/delete', methods=['POST'])
 def delete_file():
     rel_path = request.json.get('path', '')
-    if rel_path.endswith('.py'):
-        return jsonify({"status": "error", "message": "Bảo mật: Không được phép xóa file code!"})
+    
+    # =========================================================
+    # BẢN VÁ 2: CHẶN API DELETE TỪ BACKEND CHO CHẮC CỐP
+    # =========================================================
+    protected_files = ['.py', '.gitattributes', 'update_controller.json', 'update_history.json', 'version.txt']
+    if any(rel_path.endswith(ext) for ext in protected_files):
+        return jsonify({"status": "error", "message": "Bảo mật: Không được phép xóa file hệ thống!"})
         
     target_file = os.path.abspath(os.path.join(BASE_DIR, rel_path))
     if not target_file.startswith(BASE_DIR) or not os.path.isfile(target_file):
