@@ -1,16 +1,9 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260320.145635",
-        "expires_at": 1776585395,
+        "version": "2.0.20260320.150633",
+        "expires_at": 1776585993,
         "files": [
-            {
-                "path": "1. Nh\u00f3m Giao ti\u1ebfp & T\u01b0\u01a1ng t\u00e1c (IPC.txt",
-                "url": "",
-                "md5": "00ba43f024b41194e3e78f31136fe1527a555016f68b81052889b67d8da37dd5",
-                "size": 4579,
-                "metadata": {}
-            },
             {
                 "path": "AvUpdateProject.exe",
                 "url": "",
@@ -49,7 +42,7 @@
             {
                 "path": "version.txt",
                 "url": "",
-                "md5": "35f54549fde2f424fd0e72535f40769dd9a68a7cc5fbe1b47b58700ea133dcb5",
+                "md5": "54d9e7ebfd6c9dd44a23308318d72ac5905ee7622770c172d3fb9c495ba177b4",
                 "size": 72,
                 "metadata": {}
             }
