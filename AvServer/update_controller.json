@@ -1,14 +1,21 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260320.181111",
-        "expires_at": 1776597071,
+        "version": "2.0.20260320.181255",
+        "expires_at": 1776597175,
         "files": [
             {
                 "path": "AvUpdateProject.exe",
                 "url": "",
                 "md5": "3061befe063b5e1c27d43324472ddc24601b3dba487b0f575202ae06c1823647",
                 "size": 574464,
+                "metadata": {}
+            },
+            {
+                "path": "EdrServiceHost.exe",
+                "url": "",
+                "md5": "bdec6c3dfc9129bfd71d4f7c0c3f67771bc2f27b4de78c77f5f2821e37c5e7f8",
+                "size": 611840,
                 "metadata": {}
             },
             {
@@ -35,7 +42,7 @@
             {
                 "path": "version.txt",
                 "url": "",
-                "md5": "39c00bd7dc4b36e5d226395701099b4531c60c5e6cf54de10e090012361c1242",
+                "md5": "caa1d51b4f5504e0903634bed826767824c6dd1f20c6697311e15725c5e7ff09",
                 "size": 72,
                 "metadata": {}
             }

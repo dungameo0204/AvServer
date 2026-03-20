@@ -10759,5 +10759,56 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.20260320.181255",
+            "expires_at": 1776597175,
+            "files": [
+                {
+                    "path": "AvUpdateProject.exe",
+                    "url": "",
+                    "md5": "3061befe063b5e1c27d43324472ddc24601b3dba487b0f575202ae06c1823647",
+                    "size": 574464,
+                    "metadata": {}
+                },
+                {
+                    "path": "EdrServiceHost.exe",
+                    "url": "",
+                    "md5": "bdec6c3dfc9129bfd71d4f7c0c3f67771bc2f27b4de78c77f5f2821e37c5e7f8",
+                    "size": 611840,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/NcsFwSvc.dll",
+                    "url": "",
+                    "md5": "80e766e969499e5502f67339cbe6f6b369ad9075f7c6000aebb522985b88aba4",
+                    "size": 2791424,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/SvcBC.dll",
+                    "url": "",
+                    "md5": "b045e4545ee68b7c6e0ab967f894934da2ab8b2069552b591252e95bdef8c343",
+                    "size": 1516032,
+                    "metadata": {}
+                },
+                {
+                    "path": "modules.json",
+                    "url": "",
+                    "md5": "ca48437bd67267a2ee66ce3859dcfcfcf0de17bb82ccc49df4f654d840002991",
+                    "size": 456,
+                    "metadata": {}
+                },
+                {
+                    "path": "version.txt",
+                    "url": "",
+                    "md5": "caa1d51b4f5504e0903634bed826767824c6dd1f20c6697311e15725c5e7ff09",
+                    "size": 72,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
