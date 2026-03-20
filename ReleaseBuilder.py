@@ -6,28 +6,17 @@ from datetime import datetime
 
 # ================= CẤU HÌNH =================
 SERVER_DIR = "AvServer" 
-DUMMY_FILES_DIR = os.path.join(SERVER_DIR, "heavy_payloads")
 # ============================================
 
 def calculate_sha256(filepath):
     sha256_hash = hashlib.sha256()
     with open(filepath, "rb") as f:
+        # Đọc từng block nhỏ để không ăn RAM nếu lỡ có file lớn
         for byte_block in iter(lambda: f.read(4096 * 1024), b""): 
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest()
 
-# 1. TỰ ĐỘNG SINH DỮ LIỆU MỚI TINH ĐỂ ĐỔI HASH
-def generate_dummy_files(target_dir, num_files=12, size_mb=1): 
-    os.makedirs(target_dir, exist_ok=True)
-    print(f"[*] Dang tao MOI {num_files} file nang, moi file {size_mb}MB (Mat chut thoi gian)...")
-    
-    for i in range(num_files):
-        filepath = os.path.join(target_dir, f"database_pack_{i}.dat")
-        with open(filepath, "wb") as f:
-            f.write(os.urandom(size_mb * 1024 * 1024))
-        print(f"  -> Da thay mau file: {filepath}")
-
-# 2. TỰ ĐỘNG TĂNG VERSION THEO THỜI GIAN THỰC
+# TỰ ĐỘNG TĂNG VERSION THEO THỜI GIAN THỰC
 def get_auto_version():
     return datetime.now().strftime("2.0.%Y%m%d.%H%M%S")
 
@@ -36,19 +25,19 @@ def build_release():
     print(f"=== HỆ THỐNG TỰ ĐỘNG ĐÓNG GÓI PHIÊN BẢN (v{LATEST_VERSION}) ===")
     
     os.makedirs(SERVER_DIR, exist_ok=True)
-    generate_dummy_files(DUMMY_FILES_DIR)
     
     manifest_files = []
-    print("\n[*] Dang tinh toan ma SHA-256 & Size...")
+    print("\n[*] Đang tính toán mã SHA-256 & Size...")
     
     for root, dirs, files in os.walk(SERVER_DIR):
         # =====================================================================
-        # [MA THUẬT] CẮT ĐỨT ĐƯỜNG ĐI VÀO THƯ MỤC RÁC TỪ TRONG TRỨNG NƯỚC
+        # CẮT ĐỨT ĐƯỜNG ĐI VÀO THƯ MỤC RÁC TỪ TRONG TRỨNG NƯỚC
         # =====================================================================
-        dirs[:] = [d for d in dirs if not d.startswith('.') and d != '__pycache__']
+        dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['__pycache__', 'venv', 'heavy_payloads']]
         
         for file in files:
-            if file in ["update_controller.json", "update_history.json"]:
+            # Bỏ qua file cấu hình json và các file code Python (tránh update nhầm mã nguồn)
+            if file in ["update_controller.json", "update_history.json"] or file.endswith('.py') or file.endswith('.pyc'):
                 continue 
                 
             filepath = os.path.join(root, file)
@@ -75,13 +64,13 @@ def build_release():
         }
     }
     
-    # Ghi file JSON
+    # Ghi file JSON Controller
     controller_path = os.path.join(SERVER_DIR, "update_controller.json")
     with open(controller_path, "w", encoding="utf-8") as f:
         json.dump(release_info, f, indent=4)
-    print(f"\n[+] Da xuat file JSON cho Client: {controller_path}")
+    print(f"\n[+] Đã xuất file JSON cho Client: {controller_path}")
 
-    # Ghi lịch sử
+    # Ghi lịch sử Update
     history_path = os.path.join(SERVER_DIR, "update_history.json")
     history_data = []
     if os.path.exists(history_path):
@@ -97,7 +86,7 @@ def build_release():
     with open(history_path, "w", encoding="utf-8") as f:
         json.dump(history_data, f, indent=4)
         
-    print(f"=== HOAN TAT BUILD v{LATEST_VERSION}! BAC HAY DAY LEN GITHUB NHÉ ===")
+    print(f"=== HOÀN TẤT BUILD v{LATEST_VERSION}! BÁC HÃY ĐẨY LÊN GITHUB NHÉ ===")
 
 if __name__ == "__main__":
     build_release()
