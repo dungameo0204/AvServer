@@ -1,0 +1,63 @@
+1. Nhóm Giao tiếp & Tương tác (IPC - Inter-Process Communication)
+Mở kênh Pipe Server: Lắng nghe và giao tiếp với Client (giao diện UI) thông qua Named Pipe.
+
+Phân loại Request: Đọc và xử lý các loại tin nhắn khác nhau từ Client (như MessageTypeUpdate, MessageTypeStatus, MessageRestartServicesAfterUpdate).
+
+Stream Dữ liệu (Real-time): Liên tục đẩy thông tin tiến độ (%) tải file về cho Client thông qua cơ chế luồng (Channel trong Go) mà không làm nghẽn kết nối.
+
+2. Nhóm Kiểm tra & Đánh giá Cập nhật (Check Update Logic)
+Đọc cấu hình động: Lấy địa chỉ máy chủ tải update từ file server_connect.txt hoặc từ biến môi trường lúc build.
+
+Kiểm tra chống lặp (Mutex Logic): Kiểm tra cờ IS_UPDATING để đảm bảo không có 2 tiến trình update chạy đè lên nhau cùng lúc.
+
+Tôn trọng Antivirus (WaitAvScanning): Phát hiện xem Antivirus có đang trong quá trình rà quét hệ thống hay không.
+
+Update chờ (Background Check): Nếu AV đang bận quét, hệ thống tự động đưa tiến trình check update xuống chạy ngầm (CheckUpdateWhenScanCompleted) và trả về lỗi giả (ErrNoUpdateAvailable) để Client không bị treo UI.
+
+Thẩm định Phiên bản & Tài nguyên: * Kết nối với Server tải thông tin phiên bản (DownloadFileDirector).
+
+So sánh phiên bản để đảm bảo hợp lệ (IsValidVersionForUpdate).
+
+Kiểm tra ổ cứng xem có đủ dung lượng để tải bản mới không (CheckUpdateSpace).
+
+3. Nhóm Tải xuống Bất đồng bộ (Async Download Engine)
+Tải nền (Background Processing): Tách quá trình tải file ra một luồng riêng (Goroutine RunUpdate) để trả luồng chính về ngay cho Client.
+
+Tải khác biệt (Differential Download): Đọc file cấu hình cũ và so sánh (CompareFileChange) để chỉ tải về những file bị thay đổi, giúp tiết kiệm băng thông.
+
+Xác thực toàn vẹn (Checksum): Tự động tính toán mã MD5 của từng file tải về để so sánh với Server, đảm bảo file không bị hỏng hóc hay chèn mã độc lúc tải.
+
+Lưu trữ tạm thời: Ghi siêu dữ liệu (metadata) vào temp.json và cất file tải về vào thư mục downloads/.
+
+4. Nhóm Áp dụng & Quản lý Dịch vụ (Apply & Restart)
+Đồng bộ hóa quét AV: Trước khi thay file, lại phải gọi WaitAvScanning để đảm bảo AV thực sự đang rảnh rỗi.
+
+Gửi lệnh Dừng (Stop Request): Giao tiếp qua Pipe để ép các Service của Antivirus dừng hoạt động. Bắt buộc phải có cơ chế xử lý Timeout (thoát lỗi nếu Service bị kẹt không chịu tắt).
+
+Cơ chế Sao lưu (Backup): Chuyển toàn bộ các file cũ đang chạy của hệ thống vào thư mục backup/ trước khi động dao kéo.
+
+Thay thế (Replace): Copy các file mới từ downloads/ đè vào thư mục làm việc chính.
+
+Khởi động lại (Start): Bật lại các Service của Antivirus.
+
+Hậu kỳ (Post-Install): Gọi chạy file thực thi thông qua Task Scheduler (RunExecutableWithTaskScheduler) và ghi đè file lưu phiên bản mới (WriteVersion).
+
+5. Nhóm Tự cập nhật cực đoan (Self-Update qua A/B Slot)
+Nhận diện lột xác: Tự động phát hiện xem trong gói update có chứa file AVUpdater.exe mới hay không.
+
+Luân chuyển Slot: Di chuyển file Updater mới vào thư mục dự phòng (Slot B nếu đang chạy Slot A).
+
+Cập nhật con trỏ: Sửa đổi file current_version.json để trỏ trạng thái Active sang Slot mới.
+
+Đánh thức Launcher: Kích hoạt phần mềm trung gian AppLauncher.exe.
+
+Tự sát (Self Exit): Tự tắt tiến trình của chính mình để nhường quyền cho Launcher khởi động bản Update mới.
+
+6. Nhóm Chịu lỗi & Phục hồi (Fault Tolerance & Rollback)
+Phát hiện sự cố: Bắt được lỗi nếu quá trình Start Service của Antivirus (sau khi đã chép file mới) bị thất bại.
+
+Kích hoạt Rollback (RollbackUpdate): Xóa các file mới bị lỗi.
+
+Phục hồi nguyên trạng: Lấy lại các file đã cất trong thư mục backup/ chép ngược trở lại hệ thống và thử Start Service lại một lần nữa để cứu sống Antivirus.
+
+Ghi Log: Ghi chép mọi hành động ra thư mục logs/ (av_updater.log, launcher.log).
