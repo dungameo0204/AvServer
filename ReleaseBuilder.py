@@ -25,11 +25,19 @@ def build_release():
     os.makedirs(SERVER_DIR, exist_ok=True)
     
     # =====================================================================
-    # [MA THUẬT ĐÁNH LỪA C++]: Ép ghi nội dung mới vào version.txt
-    # Để C++ thấy Hash thay đổi và bắt buộc phải tải Update!
+    # [VẮC-XIN 1]: ÉP GHI DƯỚI DẠNG BINARY NGUYÊN THỦY ("wb")
+    # Để Windows không tự động chèn thêm ký tự \r vào file
     # =====================================================================
-    with open(os.path.join(SERVER_DIR, "version.txt"), "w", encoding="utf-8") as f:
-        f.write(f"Phiên bản: {LATEST_VERSION}\nCập nhật lúc: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
+    version_content = f"Phiên bản: {LATEST_VERSION}\nCập nhật lúc: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}".encode('utf-8')
+    with open(os.path.join(SERVER_DIR, "version.txt"), "wb") as f:
+        f.write(version_content)
+
+    # =====================================================================
+    # [VẮC-XIN 2]: LÁ BÙA CHỐNG GIT LÀM SAI HASH
+    # Ép Git coi tất cả file trong thư mục này là Binary, cấm sửa ký tự!
+    # =====================================================================
+    with open(os.path.join(SERVER_DIR, ".gitattributes"), "wb") as f:
+        f.write(b"* -text\n")
     
     manifest_files = []
     print("\n[*] Đang tính toán mã SHA-256 & Size...")
@@ -38,7 +46,9 @@ def build_release():
         dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['__pycache__', 'venv', 'heavy_payloads']]
         
         for file in files:
-            if file in ["update_controller.json", "update_history.json"] or file.endswith('.py') or file.endswith('.pyc'):
+            # Vẫn bỏ qua file JSON cấu hình và code Python, 
+            # Giờ bỏ qua luôn cả lá bùa .gitattributes để Client khỏi tải về rác máy
+            if file in ["update_controller.json", "update_history.json", ".gitattributes"] or file.endswith('.py') or file.endswith('.pyc'):
                 continue 
                 
             filepath = os.path.join(root, file)
