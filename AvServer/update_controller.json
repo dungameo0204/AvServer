@@ -1,8 +1,8 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260324.105923",
-        "expires_at": 1776916763,
+        "version": "2.0.20260324.110000",
+        "expires_at": 1776916800,
         "requires_restart": true,
         "files": [
             {
@@ -50,7 +50,7 @@
             {
                 "path": "version.txt",
                 "url": "",
-                "md5": "d4f9c10cfbcb287e3d0b7032f64c3bee4fc7333125aa8d4c42da6874c4a6c89c",
+                "md5": "1d3e3f02766892fd0929221434255d8b33f2f8d103afdcb32d7c2773b4f80b47",
                 "size": 72,
                 "metadata": {}
             }
