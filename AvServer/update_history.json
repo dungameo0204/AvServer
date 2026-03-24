@@ -11181,5 +11181,63 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.20260324.101452",
+            "expires_at": 1776914092,
+            "files": [
+                {
+                    "path": "AvUpdateProject.exe",
+                    "url": "",
+                    "md5": "38c7279073d7735b336a64197d06ae4443eb37ef59711d975db70a192cb3d26b",
+                    "size": 3806720,
+                    "metadata": {}
+                },
+                {
+                    "path": "EdrServiceHost.exe",
+                    "url": "",
+                    "md5": "bdec6c3dfc9129bfd71d4f7c0c3f67771bc2f27b4de78c77f5f2821e37c5e7f8",
+                    "size": 611840,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/NcsFwSvc.dll",
+                    "url": "",
+                    "md5": "80e766e969499e5502f67339cbe6f6b369ad9075f7c6000aebb522985b88aba4",
+                    "size": 2791424,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/SvcBC.dll",
+                    "url": "",
+                    "md5": "b045e4545ee68b7c6e0ab967f894934da2ab8b2069552b591252e95bdef8c343",
+                    "size": 1516032,
+                    "metadata": {}
+                },
+                {
+                    "path": "hhh.txt",
+                    "url": "",
+                    "md5": "c0037d3794eacd6b6ac18ec2451241b52b33b3cb7b26c9076a102a0d173d8f15",
+                    "size": 9,
+                    "metadata": {}
+                },
+                {
+                    "path": "modules.json",
+                    "url": "",
+                    "md5": "ca48437bd67267a2ee66ce3859dcfcfcf0de17bb82ccc49df4f654d840002991",
+                    "size": 456,
+                    "metadata": {}
+                },
+                {
+                    "path": "version.txt",
+                    "url": "",
+                    "md5": "3d4fbd1b066e1beb89a93ca87ac8124cf1f87fa4820d41d0b22000800c5e3d41",
+                    "size": 72,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
