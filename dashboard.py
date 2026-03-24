@@ -39,7 +39,18 @@ HTML_TEMPLATE = """
         .file-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px dashed #ddd; background: white;}
         .file-item:hover { background: #f8f9fa; }
         
+        .file-clickable { cursor: pointer; color: #333; font-weight: 500; transition: color 0.2s; }
+        .file-clickable:hover { color: #0078D7; text-decoration: underline; }
+        
         .log-box { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 5px; text-align: left; height: 180px; overflow-y: auto; font-family: monospace; font-size: 13px; margin-top: 20px; white-space: pre-wrap; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 20px; border-radius: 8px; width: 600px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 5px 25px rgba(0,0,0,0.3);}
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; }
+        .modal-title { font-weight: bold; font-size: 16px; color: #333; }
+        .close-btn { background: #dc3545; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; flex: none;}
+        .close-btn:hover { background: #c82333; }
+        .file-viewer { flex-grow: 1; overflow-y: auto; background: #1e1e1e; color: #d4d4d4; padding: 15px; font-family: Consolas, monospace; font-size: 14px; white-space: pre-wrap; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -58,9 +69,27 @@ HTML_TEMPLATE = """
         </div>
 
         <h3>⚡ Actions</h3>
+        
+        <div style="margin-bottom: 15px; background: #fff3cd; padding: 10px; border-radius: 5px; border: 1px solid #ffeeba;">
+            <label style="font-weight: bold; cursor: pointer; color: #856404; display: flex; align-items: center;">
+                <input type="checkbox" id="requireRestartCheckbox" style="width: 20px; height: 20px; margin-right: 10px;"> 
+                ⚠️ Bắt buộc RESTART lại máy tính sau khi cập nhật phiên bản này
+            </label>
+        </div>
+
         <button id="deployBtn" class="btn-main btn-deploy" onclick="autoDeploy()">🚀 ONE-CLICK DEPLOY (BUILD & PUSH)</button>
         
         <div class="log-box" id="terminal">System Ready...\n</div>
+    </div>
+
+    <div class="modal-overlay" id="fileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitle">Đang xem file...</span>
+                <button class="close-btn" onclick="closeModal()">Đóng</button>
+            </div>
+            <div class="file-viewer" id="fileContent">Nội dung file sẽ hiện ở đây...</div>
+        </div>
     </div>
 
     <script>
@@ -129,14 +158,39 @@ HTML_TEMPLATE = """
             });
         }
 
+        function viewFile(filePath) {
+            document.getElementById('fileModal').style.display = 'flex';
+            document.getElementById('modalTitle').innerText = '📄 ' + filePath.split('/').pop();
+            document.getElementById('fileContent').innerText = 'Đang tải nội dung file...';
+
+            fetch('/api/read_file?path=' + encodeURIComponent(filePath) + '&t=' + Date.now(), { cache: 'no-store' })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        document.getElementById('fileContent').innerText = data.content;
+                    } else {
+                        document.getElementById('fileContent').innerText = 'Lỗi: ' + data.message;
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('fileContent').innerText = 'Lỗi kết nối tới Server!';
+                });
+        }
+
+        function closeModal() {
+            document.getElementById('fileModal').style.display = 'none';
+        }
+
         async function autoDeploy() {
             deployBtn.disabled = true;
             deployBtn.innerText = "⏳ ĐANG XỬ LÝ (XIN CHỜ VÀI GIÂY)...";
             deployBtn.style.backgroundColor = "gray";
 
             try {
+                let isRestart = document.getElementById('requireRestartCheckbox').checked;
+
                 logToTerminal("--- BƯỚC 1: ĐÓNG GÓI PHIÊN BẢN (BUILD) ---", "info");
-                let buildRes = await fetch('/build?t=' + Date.now(), { cache: 'no-store' });
+                let buildRes = await fetch('/build?t=' + Date.now() + '&restart=' + isRestart, { cache: 'no-store' });
                 let buildData = await buildRes.json();
                 
                 if (buildData.status === 'success') {
@@ -197,15 +251,17 @@ def build_tree_html(current_dir, is_root=False):
             '''
         else:
             delete_btn = f'<button class="btn-sm bg-red" onclick="deleteFile(\'{rel_path}\')">🗑️ Xóa</button>'
-            
-            # =========================================================
-            # BẢN VÁ 1: DANH SÁCH CÁC FILE "BẤT TỬ" CẤM XÓA TRÊN UI
-            # =========================================================
             locked_files = ['README.md', '.gitattributes', 'update_controller.json', 'update_history.json', 'version.txt']
+            
             if item.endswith('.py') or item in locked_files:
                 delete_btn = '<span style="color:gray; font-size:12px;">🔒 Khóa</span>'
+            
+            if item.endswith(('.exe', '.dll', '.pdb', '.dat')):
+                file_display = f'<span style="color:#888;">📄 {item} <em style="font-size:11px">(Binary)</em></span>'
+            else:
+                file_display = f'<span class="file-clickable" onclick="viewFile(\'{rel_path}\')">📄 {item}</span>'
                 
-            html += f'<li><div class="file-item"><span>📄 {item}</span> {delete_btn}</div></li>'
+            html += f'<li><div class="file-item">{file_display} {delete_btn}</div></li>'
             
     html += '</ul>'
     return html
@@ -217,6 +273,26 @@ def home():
 @app.route('/api/tree')
 def get_tree():
     return build_tree_html(BASE_DIR, is_root=True)
+
+@app.route('/api/read_file')
+def read_file():
+    rel_path = request.args.get('path', '')
+    if not rel_path:
+        return jsonify({"status": "error", "message": "Không có đường dẫn."})
+    
+    target_file = os.path.abspath(os.path.join(BASE_DIR, rel_path))
+    
+    if not target_file.startswith(BASE_DIR) or not os.path.isfile(target_file):
+        return jsonify({"status": "error", "message": "File không hợp lệ hoặc không tồn tại."})
+        
+    try:
+        with open(target_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+        return jsonify({"status": "success", "content": content})
+    except UnicodeDecodeError:
+        return jsonify({"status": "error", "message": "Đây là file nhị phân (.exe, .dll,...) hoặc có định dạng mã hóa. Không thể xem dưới dạng văn bản!"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -239,10 +315,6 @@ def upload_file():
 @app.route('/delete', methods=['POST'])
 def delete_file():
     rel_path = request.json.get('path', '')
-    
-    # =========================================================
-    # BẢN VÁ 2: CHẶN API DELETE TỪ BACKEND CHO CHẮC CỐP
-    # =========================================================
     protected_files = ['.py', '.gitattributes', 'update_controller.json', 'update_history.json', 'version.txt']
     if any(rel_path.endswith(ext) for ext in protected_files):
         return jsonify({"status": "error", "message": "Bảo mật: Không được phép xóa file hệ thống!"})
@@ -260,7 +332,12 @@ def delete_file():
 @app.route('/build')
 def build_manifest():
     try:
-        result = subprocess.run(["python", "-X", "utf8", "ReleaseBuilder.py"], capture_output=True, text=True, check=True, encoding='utf-8')
+        is_restart = request.args.get('restart', 'false') == 'true'
+        cmd = ["python", "-X", "utf8", "ReleaseBuilder.py"]
+        if is_restart:
+            cmd.append("--restart")
+
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True, encoding='utf-8')
         return jsonify({"status": "success", "message": "Build thành công!\n" + result.stdout})
     except subprocess.CalledProcessError as e:
         return jsonify({"status": "error", "message": f"Lỗi Build: {e.stderr}"})

@@ -2,6 +2,7 @@ import os
 import json
 import hashlib
 import time
+import sys
 from datetime import datetime
 
 # ================= CẤU HÌNH =================
@@ -20,22 +21,22 @@ def get_auto_version():
 
 def build_release():
     LATEST_VERSION = get_auto_version()
+    
+    # Kiểm tra xem có lệnh restart từ UI không
+    requires_restart = "--restart" in sys.argv 
+    
     print(f"=== HỆ THỐNG TỰ ĐỘNG ĐÓNG GÓI PHIÊN BẢN (v{LATEST_VERSION}) ===")
+    if requires_restart:
+        print("[!] CẢNH BÁO: PHIÊN BẢN NÀY CÓ YÊU CẦU KHỞI ĐỘNG LẠI MÁY (RESTART)!")
     
     os.makedirs(SERVER_DIR, exist_ok=True)
     
-    # =====================================================================
-    # [VẮC-XIN 1]: ÉP GHI DƯỚI DẠNG BINARY NGUYÊN THỦY ("wb")
-    # Để Windows không tự động chèn thêm ký tự \r vào file
-    # =====================================================================
+    # VẮC-XIN 1: ÉP GHI DƯỚI DẠNG BINARY NGUYÊN THỦY ("wb")
     version_content = f"Phiên bản: {LATEST_VERSION}\nCập nhật lúc: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}".encode('utf-8')
     with open(os.path.join(SERVER_DIR, "version.txt"), "wb") as f:
         f.write(version_content)
 
-    # =====================================================================
-    # [VẮC-XIN 2]: LÁ BÙA CHỐNG GIT LÀM SAI HASH
-    # Ép Git coi tất cả file trong thư mục này là Binary, cấm sửa ký tự!
-    # =====================================================================
+    # VẮC-XIN 2: LÁ BÙA CHỐNG GIT LÀM SAI HASH
     with open(os.path.join(SERVER_DIR, ".gitattributes"), "wb") as f:
         f.write(b"* -text\n")
     
@@ -46,8 +47,7 @@ def build_release():
         dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['__pycache__', 'venv', 'heavy_payloads']]
         
         for file in files:
-            # Vẫn bỏ qua file JSON cấu hình và code Python, 
-            # Giờ bỏ qua luôn cả lá bùa .gitattributes để Client khỏi tải về rác máy
+            # Bỏ qua các file cấu hình và code Python
             if file in ["update_controller.json", "update_history.json", ".gitattributes"] or file.endswith('.py') or file.endswith('.pyc'):
                 continue 
                 
@@ -70,6 +70,7 @@ def build_release():
         "manifest": {
             "version": LATEST_VERSION,
             "expires_at": int(time.time()) + 2592000, 
+            "requires_restart": requires_restart, # <-- CỜ RESTART NẰM ĐÂY
             "files": manifest_files
         }
     }
