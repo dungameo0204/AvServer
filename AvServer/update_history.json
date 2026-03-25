@@ -477,5 +477,64 @@
                 }
             ]
         }
+    },
+    {
+        "has_update": true,
+        "manifest": {
+            "version": "2.0.20260325.182527",
+            "expires_at": 1777029927,
+            "requires_restart": false,
+            "files": [
+                {
+                    "path": "AvUpdateProject.exe",
+                    "url": "",
+                    "md5": "4991156dad03205fb8fc9db196d1ebcba36fc7008e7470d43ef55821990ac2db",
+                    "size": 3814912,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/NcsFwSvc.dll",
+                    "url": "",
+                    "md5": "80e766e969499e5502f67339cbe6f6b369ad9075f7c6000aebb522985b88aba4",
+                    "size": 2791424,
+                    "metadata": {}
+                },
+                {
+                    "path": "Modules/SvcBC.dll",
+                    "url": "",
+                    "md5": "b045e4545ee68b7c6e0ab967f894934da2ab8b2069552b591252e95bdef8c343",
+                    "size": 1516032,
+                    "metadata": {}
+                },
+                {
+                    "path": "Rule_scan/yara_force_core_AV_2712.yarc",
+                    "url": "",
+                    "md5": "94975e2480cdb802a2fe9c967f213ccf58b0a36b275bc2ace3f94b16286996a7",
+                    "size": 11255655,
+                    "metadata": {}
+                },
+                {
+                    "path": "ScanYaraX.dll",
+                    "url": "",
+                    "md5": "7882ad9f505c18930b64c82c15569ca135b3773815fcdac5c94464c711ad7f2a",
+                    "size": 12621312,
+                    "metadata": {}
+                },
+                {
+                    "path": "modules.json",
+                    "url": "",
+                    "md5": "ca48437bd67267a2ee66ce3859dcfcfcf0de17bb82ccc49df4f654d840002991",
+                    "size": 456,
+                    "metadata": {}
+                },
+                {
+                    "path": "version.txt",
+                    "url": "",
+                    "md5": "32f17e8926018a8c2d45266f9847d62db78efe50991be9061623d0e3d8dc3017",
+                    "size": 72,
+                    "metadata": {}
+                }
+            ]
+        }
     }
 ]
