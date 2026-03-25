@@ -1,22 +1,22 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260324.112345",
-        "expires_at": 1776918225,
-        "requires_restart": true,
+        "version": "2.0.20260325.173814",
+        "expires_at": 1777027094,
+        "requires_restart": false,
         "files": [
             {
                 "path": "AvUpdateProject.exe",
                 "url": "",
-                "md5": "8d486af450964c566d9882a5f9b848039c0e60a206ac065d5b95ce21501dae26",
-                "size": 3812864,
+                "md5": "e7f72559e048f4a2f1bedbdc05c2ada05a251d54311a1ebc7955fa92a4644823",
+                "size": 3815424,
                 "metadata": {}
             },
             {
-                "path": "EdrServiceHost.exe",
+                "path": "EDRServiceAV.exe",
                 "url": "",
-                "md5": "bdec6c3dfc9129bfd71d4f7c0c3f67771bc2f27b4de78c77f5f2821e37c5e7f8",
-                "size": 611840,
+                "md5": "373a7a02d84839212cd3d4317a0f1ae85a9bb4084527a2fc4bb5d1c4d76b1199",
+                "size": 3863552,
                 "metadata": {}
             },
             {
@@ -34,10 +34,17 @@
                 "metadata": {}
             },
             {
-                "path": "hhh.txt",
+                "path": "Rule_scan/yara_force_core_AV_2712.yarc",
                 "url": "",
-                "md5": "c0037d3794eacd6b6ac18ec2451241b52b33b3cb7b26c9076a102a0d173d8f15",
-                "size": 9,
+                "md5": "94975e2480cdb802a2fe9c967f213ccf58b0a36b275bc2ace3f94b16286996a7",
+                "size": 11255655,
+                "metadata": {}
+            },
+            {
+                "path": "ScanYaraX.dll",
+                "url": "",
+                "md5": "7882ad9f505c18930b64c82c15569ca135b3773815fcdac5c94464c711ad7f2a",
+                "size": 12621312,
                 "metadata": {}
             },
             {
@@ -50,7 +57,7 @@
             {
                 "path": "version.txt",
                 "url": "",
-                "md5": "0bc12eb3ed46b67b3f1cfc513d7d9047456e981985923f3c94d1181f9caf4fc7",
+                "md5": "084c6829b9adb477dca1ef11cc3482a290b148f268f7cb94ebf1bec3b83369fa",
                 "size": 72,
                 "metadata": {}
             }
