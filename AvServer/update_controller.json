@@ -1,8 +1,8 @@
 {
     "has_update": true,
     "manifest": {
-        "version": "2.0.20260325.173814",
-        "expires_at": 1777027094,
+        "version": "2.0.20260325.175137",
+        "expires_at": 1777027897,
         "requires_restart": false,
         "files": [
             {
@@ -10,13 +10,6 @@
                 "url": "",
                 "md5": "e7f72559e048f4a2f1bedbdc05c2ada05a251d54311a1ebc7955fa92a4644823",
                 "size": 3815424,
-                "metadata": {}
-            },
-            {
-                "path": "EDRServiceAV.exe",
-                "url": "",
-                "md5": "373a7a02d84839212cd3d4317a0f1ae85a9bb4084527a2fc4bb5d1c4d76b1199",
-                "size": 3863552,
                 "metadata": {}
             },
             {
@@ -57,7 +50,7 @@
             {
                 "path": "version.txt",
                 "url": "",
-                "md5": "084c6829b9adb477dca1ef11cc3482a290b148f268f7cb94ebf1bec3b83369fa",
+                "md5": "a70d9cc7ea7693664744c28cd8e0b2af75ba0b325a9104c6bb98dda923312e45",
                 "size": 72,
                 "metadata": {}
             }
